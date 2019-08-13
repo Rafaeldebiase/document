@@ -1,0 +1,11 @@
+namespace Document.Enum
+{
+    public enum Category
+    {
+        RN1, 
+        RN2, 
+        RN3, 
+        RN4, 
+        RN5
+    }
+}
