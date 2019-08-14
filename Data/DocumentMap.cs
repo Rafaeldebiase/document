@@ -38,6 +38,10 @@ namespace Document.Data
                 .IsRequired()
                 .HasColumnName("archive")
                 .HasColumnType("binary(16)");
+
+            builder.Property(field => field.Delete)
+                .HasColumnName("delete")
+                .HasColumnType("bool");
         }
     }
 }
