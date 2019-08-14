@@ -10,14 +10,7 @@ namespace Document.Data
         {
             builder.ToTable("Document");
 
-            builder.HasKey(campo => campo.Id);
-            
-            builder.OwnsOne(campo => campo.Code, code =>{
-                code.Property(campo => campo.Number)
-                    .IsRequired()
-                    .HasColumnName("Code")
-                    .HasColumnType("int");
-            });
+            builder.HasKey(campo => campo.Code);
 
             builder.Property(campo => campo.Title)
                 .IsRequired()
