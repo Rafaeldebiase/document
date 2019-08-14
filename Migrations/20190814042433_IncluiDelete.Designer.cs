@@ -3,14 +3,16 @@ using System;
 using Document.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace document.Migrations
 {
     [DbContext(typeof(ConfigDataContext))]
-    partial class ConfigDataContextModelSnapshot : ModelSnapshot
+    [Migration("20190814042433_IncluiDelete")]
+    partial class IncluiDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
