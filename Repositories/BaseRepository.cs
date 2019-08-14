@@ -11,7 +11,7 @@ namespace Document.Repository
         {
             
         }
-        public abstract Task<T> GetId(Guid id);
+        public abstract Task<T> GetId(int code);
         public abstract Task<IList<T>> GetAll();
         public abstract Task Insert(T obj);
         public abstract void Edit(T obj);
