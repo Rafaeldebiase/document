@@ -12,7 +12,7 @@ namespace Document.Domain
             
         }
 
-        public DocumentModel(Code code, string title, string process, Category category, byte[] archive, 
+        public DocumentModel(int code, string title, string process, Category category, byte[] archive, 
             bool delete)
         {
             Code = code;
@@ -23,8 +23,7 @@ namespace Document.Domain
             Delete = delete;
         }
 
-        public Guid Id { get; private set; }
-        public Code Code { get; private set; }
+        public int Code { get; private set; }
         public string Title { get; private set; }
         public string Process { get; private set; }
         public Category Category { get; private set; }
