@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Document.Enum;
 using Document.ObjectValue;
+using Document.Interface.Repository;
 
 namespace Document.Repository
 {
-    public class DocumentRepository : BaseRepository<DocumentModel>
+    public class DocumentRepository : BaseRepository<DocumentModel>, IDocumentRepository
     {
         private readonly ConfigDataContext _context;
 
@@ -19,14 +20,8 @@ namespace Document.Repository
             _context = context;
         }
 
-        public override async Task<DocumentModel> GetId(Guid id) => 
-            await _context.Documents.FindAsync(id);
-
-        public async Task<DocumentModel> GetCode(Code code) =>
-            await _context.Documents
-                .Where(field => field.Code == code)
-                .OrderBy(field => field.Title)
-                .FirstOrDefaultAsync();
+        public override async Task<DocumentModel> GetId(int code) => 
+            await _context.Documents.FindAsync(code);
 
         public async Task<IList<DocumentModel>> GetTitle(string title) =>
             await _context.Documents
@@ -51,16 +46,16 @@ namespace Document.Repository
                 .OrderBy(field => field.Title)
                 .ToListAsync();
 
-        public override async Task Insert(DocumentModel obj) => await _context.Documents.AddAsync(obj);
+        public override async Task Insert(DocumentModel document) => await _context.Documents.AddAsync(document);
 
-        public override void Edit(DocumentModel obj)
+        public override void Edit(DocumentModel document)
         {
-            _context.Documents.Update(obj);
+            _context.Documents.Update(document);
         }
 
-        public override void Delete(DocumentModel obj)
+        public override void Delete(DocumentModel document)
         {
-            _context.Documents.Update(obj);
+            _context.Documents.Update(document);
         }
 
         public override async Task<int> Save()
