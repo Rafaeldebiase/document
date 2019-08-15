@@ -3,14 +3,16 @@ using System;
 using Document.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace document.Migrations
 {
     [DbContext(typeof(ConfigDataContext))]
-    partial class ConfigDataContextModelSnapshot : ModelSnapshot
+    [Migration("20190814235028_new_initial")]
+    partial class new_initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
