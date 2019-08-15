@@ -12,6 +12,11 @@ namespace Document.Data
 
             builder.HasKey(campo => campo.Code);
 
+            builder.Property(field => field.Code)
+                .HasColumnName("code")
+                .ValueGeneratedNever()
+                .HasColumnType("int");
+
             builder.Property(campo => campo.Title)
                 .IsRequired()
                 .HasColumnName("title")
