@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
-using Document.Dto;
+using Document.Domain;
+
 
 namespace Document.Interface.Service
 {
     public interface IDocumentService
     {
-        Task<string> Insert(DocumentDto document);
+        Task<int> Insert(DocumentModel document);
     }
 }
