@@ -1,10 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using Document.Domain;
 using Document.Dto;
 using Document.Extension;
 using Document.Interface.Service;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
@@ -22,15 +24,16 @@ namespace Document.Controller
             _documentService = documentService;
         }
         [HttpPost("insert")]
-        public IActionResult Insert([FromBody] DocumentModel document)
+        public async Task<IActionResult> Insert([FromBody] DocumentModel document)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = _documentService.Insert(document);
 
-            if (response.Result == 1)
+            var response = await _documentService.Insert(document);
+
+            if (response == 1)
             {
                 return Created<DocumentModel>(document);
             }
@@ -38,6 +41,41 @@ namespace Document.Controller
             {
                 return Created("não foi possível inserir o documento.");
             }
+        }
+
+        [HttpPatch("edit")]
+        public async Task<IActionResult> Patch([FromODataUri] int key, Delta<DocumentModel> document)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var entity = await _documentService.GetId(key);
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            await _documentService.Edit(document, entity);
+
+            try
+            {
+                
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(key))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Updated(entity);
 
         }
     }
