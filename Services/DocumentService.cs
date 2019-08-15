@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Document.Domain;
 using Document.Dto;
 using Document.Enum;
+using Document.Extension;
 using Document.Interface.Repository;
 using Document.Interface.Service;
 using Microsoft.Extensions.Logging;
@@ -42,29 +43,17 @@ namespace Document.Service
             return await _documentRepository.GetAll();
         }
 
-        public async Task<string> Insert(DocumentDto documentDto)
+        public async Task<int> Insert(DocumentModel documentModel)
         {
-            var newDocumentModel = documentDto.ConvertToDocumentModel(documentDto);
-                
-            await _documentRepository.Insert(newDocumentModel);
+            await _documentRepository.Insert(documentModel);
 
-            var responseDb = await _documentRepository.Save();
-
-            if (responseDb == 1)
-            {
-                _logger.LogInformation($"Documento {newDocumentModel} inserido no banco.");
-                return "Documento inserido no banco.";
-            }
-            else
-            {
-                _logger.LogError($"Erro: Documento {newDocumentModel} não foi inserido no banco.");
-                return "Erro: Documento não foi inserido no banco.";
-            }
+            return await _documentRepository.Save();
         }
 
-        public async Task Edit()
+        public async Task Edit(int code, DocumentDto documentDto)
         {
-            
+            var document = _documentRepository.GetId(code).Result;
+
         }
 
         public async Task<string> Delete(int code)
