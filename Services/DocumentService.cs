@@ -1,11 +1,12 @@
 using Document.Domain;
 using Document.Dto;
 using Document.Interface.Repository;
+using Document.Interface.Service;
 using Microsoft.Extensions.Logging;
 
 namespace Document.Service
 {
-    public class DocumentService
+    public class DocumentService : IDocumentService
     {
         private readonly IDocumentRepository _documentRepository;
         private readonly ILogger<DocumentService> _logger;
@@ -20,7 +21,9 @@ namespace Document.Service
         {
             var newDocument = new DocumentModel(document.Code, document.Title, document.Process,
                 document.Category, document.Archive, document.Delete); 
-            _documentRepository.Insert();
+                
+            _documentRepository.Insert(newDocument);
+            var x = _documentRepository.Save();
         }
     }
 }
