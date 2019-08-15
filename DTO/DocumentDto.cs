@@ -1,3 +1,4 @@
+using Document.Domain;
 using Document.Enum;
 using System;
 using System.Collections;
@@ -17,12 +18,12 @@ namespace Document.Dto
             Delete = delete;
         }
 
-        public int Code { get; private set; }
-        public string Title { get; private set; }
-        public string Process { get; private set; }
-        public Category Category { get; private set; }
-        public byte[] Archive { get; private set; }
-        public bool Delete { get; private set; }
+        public int Code { get; set; }
+        public string Title { get; set; }
+        public string Process { get; set; }
+        public Category Category { get; set; }
+        public byte[] Archive { get; set; }
+        public bool Delete { get; set; }
 
         private Category ReceiveIntAndReturnCategory(int category)
         {
@@ -46,6 +47,12 @@ namespace Document.Dto
             {
                 return Category.RN5;
             }
+        }
+
+        public DocumentModel ConvertToDocumentModel(DocumentDto documentDto)
+        {
+            return new DocumentModel(documentDto.Code, documentDto.Title, documentDto.Process, 
+                documentDto.Category, documentDto.Archive, documentDto.Delete);
         }
     }
 }

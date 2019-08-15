@@ -1,5 +1,6 @@
 using System;
 using Document.Dto;
+using Document.Extension;
 using Document.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ namespace Document.Controller
         {
             try
             {
-                var document = obj.ToObject<DocumentDto>();
+                var document = obj.DeserializesToDocumentDto();
                 _documentService.Insert(document);
             }
             catch (System.Exception)
