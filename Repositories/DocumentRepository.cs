@@ -8,6 +8,8 @@ using System;
 using Document.Enum;
 using Document.ObjectValue;
 using Document.Interface.Repository;
+using Microsoft.AspNetCore.Mvc;
+using Document.Extension;
 
 namespace Document.Repository
 {
@@ -20,7 +22,7 @@ namespace Document.Repository
             _context = context;
         }
 
-        public override async Task<DocumentModel> GetId(int code) => 
+        public override async Task<DocumentModel> GetId(int code) =>
             await _context.Documents.FindAsync(code);
 
         public async Task<IList<DocumentModel>> GetTitle(string title) =>
@@ -28,14 +30,14 @@ namespace Document.Repository
                 .Where(field => field.Title.Contains(title))
                 .OrderBy(field => field.Title)
                 .ToListAsync();
-        
+
         public async Task<IList<DocumentModel>> GetProcess(string process) =>
             await _context.Documents
                 .Where(field => field.Process.Contains(process))
                 .OrderBy(field => field.Title)
                 .ToListAsync();
 
-        public async Task<IList<DocumentModel>> GetCategory(Category category) => 
+        public async Task<IList<DocumentModel>> GetCategory(Category category) =>
             await _context.Documents
                 .Where(field => field.Category == category)
                 .OrderBy(field => field.Title)
@@ -46,7 +48,18 @@ namespace Document.Repository
                 .OrderBy(field => field.Title)
                 .ToListAsync();
 
-        public override async Task Insert(DocumentModel document) => await _context.Documents.AddAsync(document);
+        public override async Task Insert(DocumentModel document)
+        {
+            try
+            {
+                _context.Reset();
+                await _context.Documents.AddAsync(document);
+            }
+            catch (System.InvalidOperationException e)
+            {
+                throw new Exception("erro: ", e);
+            }
+        }
 
         public override void Edit(DocumentModel document)
         {
@@ -62,12 +75,16 @@ namespace Document.Repository
         {
             try
             {
-                return await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync();
+                return result;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
-                
-                throw;
+                throw new Exception("Erro: ", e);
+            }
+            catch (ObjectDisposedException err)
+            {
+                throw new Exception("Erro: ", err);
             }
         }
     }
