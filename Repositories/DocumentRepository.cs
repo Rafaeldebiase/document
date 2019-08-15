@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Document.Enum;
 using Document.Interface.Repository;
-using Document.Extension;
+using Microsoft.AspNet.OData;
 
 namespace Document.Repository
 {
-    public class DocumentRepository : BaseRepository<DocumentModel>, IDocumentRepository
+    public class DocumentRepository : IDocumentRepository
     {
         private readonly ConfigDataContext _context;
 
@@ -20,7 +20,7 @@ namespace Document.Repository
             _context = context;
         }
 
-        public override async Task<DocumentModel> GetId(int code) =>
+        public async Task<DocumentModel> GetId(int code) =>
             await _context.Documents
                 .FindAsync(code);
 
@@ -45,17 +45,16 @@ namespace Document.Repository
                 .AsNoTracking()
                 .ToListAsync();
 
-        public override async Task<IList<DocumentModel>> GetAll() =>
+        public async Task<IList<DocumentModel>> GetAll() =>
             await _context.Documents
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
                 .ToListAsync();
 
-        public override async Task Insert(DocumentModel document)
+        public async Task Insert(DocumentModel document)
         {
             try
             {
-                _context.Reset();
                 await _context.Documents.AddAsync(document);
             }
             catch (System.InvalidOperationException e)
@@ -64,17 +63,17 @@ namespace Document.Repository
             }
         }
 
-        public override void Edit(DocumentModel document)
+        public void Edit(Delta<DocumentModel> document, DocumentModel documentModel)
+        {
+            document.Patch(documentModel);
+        }
+
+        public void Delete(DocumentModel document)
         {
             _context.Documents.Update(document);
         }
 
-        public override void Delete(DocumentModel document)
-        {
-            _context.Documents.Update(document);
-        }
-
-        public override async Task<int> Save()
+        public async Task<int> Save()
         {
             try
             {
