@@ -20,7 +20,8 @@ namespace document.Migrations
             modelBuilder.Entity("Document.Domain.DocumentModel", b =>
                 {
                     b.Property<int>("Code")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnName("code")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("Archive")
                         .IsRequired()

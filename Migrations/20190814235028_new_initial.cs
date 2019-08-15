@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace document.Migrations
 {
-    public partial class inicial : Migration
+    public partial class new_initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,16 +11,16 @@ namespace document.Migrations
                 name: "Document",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Code = table.Column<int>(type: "int", nullable: false),
+                    code = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "varchar(200)", nullable: false),
                     process = table.Column<string>(type: "varchar(200)", nullable: false),
                     category = table.Column<string>(type: "varchar(200)", nullable: false),
-                    archive = table.Column<byte[]>(type: "binary(16)", nullable: false)
+                    archive = table.Column<byte[]>(type: "binary(16)", nullable: false),
+                    delete = table.Column<bool>(type: "bool", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Document", x => x.Id);
+                    table.PrimaryKey("PK_Document", x => x.code);
                 });
         }
 

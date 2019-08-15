@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace document.Migrations
 {
     [DbContext(typeof(ConfigDataContext))]
-    [Migration("20190814042433_IncluiDelete")]
-    partial class IncluiDelete
+    [Migration("20190814235028_new_initial")]
+    partial class new_initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,8 +21,9 @@ namespace document.Migrations
 
             modelBuilder.Entity("Document.Domain.DocumentModel", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Code")
+                        .HasColumnName("code")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("Archive")
                         .IsRequired()
@@ -48,30 +49,9 @@ namespace document.Migrations
                         .HasColumnName("title")
                         .HasColumnType("varchar(200)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Code");
 
                     b.ToTable("Document");
-                });
-
-            modelBuilder.Entity("Document.Domain.DocumentModel", b =>
-                {
-                    b.OwnsOne("Document.ObjectValue.Code", "Code", b1 =>
-                        {
-                            b1.Property<Guid>("DocumentModelId");
-
-                            b1.Property<int>("Number")
-                                .HasColumnName("Code")
-                                .HasColumnType("int");
-
-                            b1.HasKey("DocumentModelId");
-
-                            b1.ToTable("Document");
-
-                            b1.HasOne("Document.Domain.DocumentModel")
-                                .WithOne("Code")
-                                .HasForeignKey("Document.ObjectValue.Code", "DocumentModelId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
                 });
 #pragma warning restore 612, 618
         }
