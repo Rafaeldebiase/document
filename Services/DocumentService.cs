@@ -6,6 +6,7 @@ using Document.Enum;
 using Document.Extension;
 using Document.Interface.Repository;
 using Document.Interface.Service;
+using Microsoft.AspNet.OData;
 using Microsoft.Extensions.Logging;
 
 namespace Document.Service
@@ -50,9 +51,10 @@ namespace Document.Service
             return await _documentRepository.Save();
         }
 
-        public async Task Edit(int code, DocumentDto documentDto)
+        public async Task Edit(Delta<DocumentModel> document, DocumentModel documentModel)
         {
-            var document = _documentRepository.GetId(code).Result;
+            _documentRepository.Edit(document, documentModel);
+            
 
         }
 
