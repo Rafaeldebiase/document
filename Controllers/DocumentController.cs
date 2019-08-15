@@ -1,7 +1,9 @@
 using System;
+using Document.Domain;
 using Document.Dto;
 using Document.Extension;
 using Document.Interface.Service;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -9,8 +11,7 @@ using Newtonsoft.Json.Linq;
 namespace Document.Controller
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class DocumentController : ControllerBase
+    public class DocumentController : ODataController
     {
         private readonly ILogger<DocumentController> _logger;
         private readonly IDocumentService _documentService;
@@ -21,17 +22,23 @@ namespace Document.Controller
             _documentService = documentService;
         }
         [HttpPost("insert")]
-        public void Insert([FromBody] JObject obj)
+        public IActionResult Insert([FromBody] DocumentModel document)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var document = obj.DeserializesToDocumentDto();
-                _documentService.Insert(document);
+                return BadRequest(ModelState);
             }
-            catch (System.Exception)
+            var response = _documentService.Insert(document);
+
+            if (response.Result == 1)
             {
-                throw;
+                return Created<DocumentModel>(document);
             }
+            else
+            {
+                return Created("não foi possível inserir o documento.");
+            }
+
         }
     }
 }
