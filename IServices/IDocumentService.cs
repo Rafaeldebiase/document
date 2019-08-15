@@ -1,10 +1,13 @@
 using System.Threading.Tasks;
-using Document.Dto;
+using Document.Domain;
+using Microsoft.AspNet.OData;
 
 namespace Document.Interface.Service
 {
     public interface IDocumentService
     {
-        Task<string> Insert(DocumentDto document);
+        Task<int> Insert(DocumentModel document);
+        Task<DocumentModel> GetId(int code);
+        Task Edit(Delta<DocumentModel> document, DocumentModel entity);
     }
 }

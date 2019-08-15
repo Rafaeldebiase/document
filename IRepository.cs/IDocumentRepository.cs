@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Document.Domain;
 using Document.Enum;
 using Document.ObjectValue;
+using Microsoft.AspNet.OData;
 
 namespace Document.Interface.Repository
 {
@@ -15,7 +16,7 @@ namespace Document.Interface.Repository
         Task<IList<DocumentModel>> GetCategory(Category category);
         Task<IList<DocumentModel>> GetAll();
         Task Insert(DocumentModel obj);
-        void Edit(DocumentModel obj);
+        void Edit(Delta<DocumentModel> document, DocumentModel documentModel);
         void Delete(DocumentModel obj);
         Task<int> Save();
     }
