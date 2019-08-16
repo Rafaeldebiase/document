@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using Document.Domain;
 using Document.Dto;
 using Document.Enum;
-using Document.Extension;
 using Document.Interface.Repository;
 using Document.Interface.Service;
-using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 
 namespace Document.Service
@@ -22,62 +21,32 @@ namespace Document.Service
             _logger = logger;
         }
 
-        public async Task<DocumentModel> GetId(int code)
-        {
-            return await _documentRepository.GetId(code);
-        }
+        public async Task<DocumentModel> GetId(int code) => 
+            await _documentRepository.GetId(code);
 
-        public async Task<IList<DocumentModel>> GetTitle(string title)
-        {
-            return await _documentRepository.GetTitle(title);
-        }
-        public async Task<IList<DocumentModel>> GetProcess(string process)
-        {
-            return await _documentRepository.GetTitle(process);
-        }
-        public async Task<IList<DocumentModel>> GetCategory(Category category)
-        {
-            return await _documentRepository.GetCategory(category);
-        }
-        public async Task<IList<DocumentModel>> GetAll()
-        {
-            return await _documentRepository.GetAll();
-        }
+        public async Task<IList<DocumentModel>> GetTitle(string title) => 
+            await _documentRepository.GetTitle(title);
 
-        public async Task<int> Insert(DocumentModel documentModel)
+        public async Task<IList<DocumentModel>> GetProcess(string process) =>
+        await _documentRepository.GetTitle(process);
+        
+        public async Task<IList<DocumentModel>> GetCategory(Category category) =>
+        await _documentRepository.GetCategory(category);
+        
+        public async Task<IList<DocumentModel>> GetAll() =>
+            await _documentRepository.GetAll();
+
+        public async Task<int> Insert(DocumentDto documentDto)
         {
-            await _documentRepository.Insert(documentModel);
+            await _documentRepository.Insert(documentDto);
 
             return await _documentRepository.Save();
         }
 
-        public async Task<int> EditAsync(Delta<DocumentModel> document, DocumentModel documentModel)
+        public async Task<int> PacthAsync(JsonPatchDocument<DocumentDto> documentPacth, DocumentModel documentModel)
         {
-            _documentRepository.Edit(document, documentModel);
-
+            _documentRepository.Patch(documentPacth, documentModel);
             return await _documentRepository.Save();
-        }
-
-        public async Task<string> Delete(int code)
-        {   
-            var document = _documentRepository.GetId(code).Result;
-            
-            var newDocumentModel = document.Deleted(document);
-
-            _documentRepository.Delete(newDocumentModel);
-
-            var responseDb = await _documentRepository.Save();
-            
-            if (responseDb == 1)
-            {
-                _logger.LogInformation($"Documento {newDocumentModel} deletado do banco.");
-                return "Documento deletado do banco.";
-            }
-            else
-            {
-                _logger.LogError($"Erro: Documento {newDocumentModel} não foi deletado do banco.");
-                return "Erro: Documento não foi deletado do banco.";
-            }
         }
 
     }
