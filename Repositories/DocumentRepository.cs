@@ -7,18 +7,21 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Document.Enum;
 using Document.Interface.Repository;
-using Microsoft.AspNet.OData;
+using AutoMapper;
 using Document.Dto;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Document.Repository
 {
     public class DocumentRepository : IDocumentRepository
     {
         private readonly ConfigDataContext _context;
+        private readonly IMapper _mapper;
 
-        public DocumentRepository(ConfigDataContext context)
+        public DocumentRepository(ConfigDataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<DocumentModel> GetId(int code) =>
@@ -52,11 +55,13 @@ namespace Document.Repository
                 .AsNoTracking()
                 .ToListAsync();
 
-        public async Task Insert(DocumentModel document)
+        public async Task Insert(DocumentDto documentDto)
         {
             try
             {
-                await _context.Documents.AddAsync(document);
+                DocumentModel documentModel = _mapper.Map<DocumentModel>(documentDto);
+
+                await _context.Documents.AddAsync(documentModel);
             }
             catch (System.InvalidOperationException e)
             {
@@ -64,14 +69,15 @@ namespace Document.Repository
             }
         }
 
-        public void Edit(Delta<DocumentModel> deltaDocument, DocumentModel documentModel)
+        public void Patch(JsonPatchDocument<DocumentDto> documentPatch, DocumentModel documentModel)
         {
-            deltaDocument.Patch(documentModel);
-        }
+            DocumentDto documentDto = _mapper.Map<DocumentDto>(documentModel);
 
-        public void Delete(DocumentModel document)
-        {
-            _context.Documents.Update(document);
+            documentPatch.ApplyTo(documentDto);
+
+            _mapper.Map(documentDto, documentModel);
+
+            _context.Update(documentModel);
         }
 
         public async Task<int> Save()
