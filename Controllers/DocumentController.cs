@@ -1,20 +1,19 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Document.Domain;
 using Document.Dto;
-using Document.Extension;
 using Document.Interface.Service;
-using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+
 
 namespace Document.Controller
 {
     [Route("api/[controller]")]
-    public class DocumentController : ODataController
+    public class DocumentController : ControllerBase
     {
         private readonly ILogger<DocumentController> _logger;
         private readonly IDocumentService _documentService;
@@ -25,40 +24,43 @@ namespace Document.Controller
             _documentService = documentService;
         }
         
+        [HttpGet("getcode/{key}")]
+        public async Task<ActionResult<IList<DocumentModel>>> GetByCode(int key)
+        {
 
-        [HttpPost]
-        [Route("post/{key}")]
-        // [ProducesResponseType(typeof(DocumentDto), StatusCodes.Status201Created)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post([FromBody] DocumentDto document, [FromODataUri] int key)
+        }
+
+        [HttpPost("insert/{key}")]
+        [ProducesResponseType(typeof(DocumentDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Post([FromBody] DocumentDto documentDto, int key)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var entity = await _documentService.GetId(key);
+            var documentModel = await _documentService.GetId(key);
 
-            if (entity != null)
+            if (documentModel != null)
             {
                 return BadRequest();
             }
-            // var response = await _documentService.Insert(document);
+            var response = await _documentService.Insert(documentDto);
 
-            // if (response == 1)
-            // {
-            //     return CreatedAtAction("Documento:", new { id = document.Code }, document);
-            // }
-            // else
-            // {
-            //     return BadRequest();
-            // }
-            return BadRequest();
+            if (response == 1)
+            {
+                return CreatedAtAction("Documento:", new { id = documentDto.Code }, documentDto);
+            }
+            else
+            {
+                return BadRequest();
+            }
             
         }
 
-        [HttpPut("edit/{key}")]
-        public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] DocumentDto document)
+        [HttpPatch("edit/{key}"), HttpDelete("delete/{key}")]
+        public async Task<IActionResult> Patch(int key, [FromBody] JsonPatchDocument<DocumentDto> documentPatch)
         {
             if (!ModelState.IsValid)
             {
@@ -74,14 +76,14 @@ namespace Document.Controller
 
             try
             {
-                // var response = await _documentService.EditAsync(deltaDocument, documentModel);
+                var response = await _documentService.PacthAsync(documentPatch, documentModel);
             }
             catch (DbUpdateConcurrencyException)
             {
                     throw;
             }
 
-            return Updated(documentModel);
+            return CreatedAtAction("x", documentPatch);
         }
     }
 }
