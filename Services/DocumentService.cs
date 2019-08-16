@@ -51,11 +51,11 @@ namespace Document.Service
             return await _documentRepository.Save();
         }
 
-        public async Task Edit(Delta<DocumentModel> document, DocumentModel documentModel)
+        public async Task<int> EditAsync(Delta<DocumentModel> document, DocumentModel documentModel)
         {
             _documentRepository.Edit(document, documentModel);
-            
 
+            return await _documentRepository.Save();
         }
 
         public async Task<string> Delete(int code)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Document.Domain;
+using Document.Dto;
 using Document.Enum;
 using Document.ObjectValue;
 using Microsoft.AspNet.OData;

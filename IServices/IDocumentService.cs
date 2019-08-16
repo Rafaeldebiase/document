@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Document.Domain;
+using Document.Dto;
 using Microsoft.AspNet.OData;
 
 namespace Document.Interface.Service
@@ -8,6 +9,6 @@ namespace Document.Interface.Service
     {
         Task<int> Insert(DocumentModel document);
         Task<DocumentModel> GetId(int code);
-        Task Edit(Delta<DocumentModel> document, DocumentModel entity);
+        Task<int> EditAsync(Delta<DocumentModel> document, DocumentModel documentDto);
     }
 }

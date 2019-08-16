@@ -8,6 +8,7 @@ using System;
 using Document.Enum;
 using Document.Interface.Repository;
 using Microsoft.AspNet.OData;
+using Document.Dto;
 
 namespace Document.Repository
 {
@@ -63,9 +64,9 @@ namespace Document.Repository
             }
         }
 
-        public void Edit(Delta<DocumentModel> document, DocumentModel documentModel)
+        public void Edit(Delta<DocumentModel> deltaDocument, DocumentModel documentModel)
         {
-            document.Patch(documentModel);
+            deltaDocument.Patch(documentModel);
         }
 
         public void Delete(DocumentModel document)
