@@ -8,6 +8,10 @@ namespace Document.Dto
 {
     public class DocumentDto
     {
+        public DocumentDto()
+        {
+            
+        }
         public DocumentDto(int code, string title, string process, int category, bool delete)
         {
             Code = code;
