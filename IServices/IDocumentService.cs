@@ -1,14 +1,20 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Document.Domain;
 using Document.Dto;
-using Microsoft.AspNet.OData;
+using Document.Enum;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Document.Interface.Service
 {
     public interface IDocumentService
     {
-        Task<int> Insert(DocumentModel document);
         Task<DocumentModel> GetId(int code);
-        Task<int> EditAsync(Delta<DocumentModel> document, DocumentModel documentDto);
+        Task<IList<DocumentModel>> GetTitle(string title);
+        Task<IList<DocumentModel>> GetProcess(string process);
+        Task<IList<DocumentModel>> GetCategory(Category category);
+        Task<IList<DocumentModel>> GetAll();
+        Task<int> Insert(DocumentDto documentDto);
+        Task<int> PacthAsync(JsonPatchDocument<DocumentDto> documentPatch, DocumentModel documentDto);
     }
 }
