@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Document.Extension;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.OData.Edm;
+using Document.Domain;
 
 namespace document
 {
@@ -43,9 +45,9 @@ namespace document
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc(routeBuilder => {
-                routeBuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                routeBuilder.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
+            app.UseMvc(routeBuilder =>
+            {
+                routeBuilder.EnableDependencyInjection();
             });
         }
     }
