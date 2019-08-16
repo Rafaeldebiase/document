@@ -5,6 +5,7 @@ using Document.Dto;
 using Document.Extension;
 using Document.Interface.Service;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,28 +24,13 @@ namespace Document.Controller
             _logger = logger;
             _documentService = documentService;
         }
-        [HttpPost("insert")]
-        public async Task<IActionResult> Insert([FromBody] DocumentModel document)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        
 
-            var response = await _documentService.Insert(document);
-
-            if (response == 1)
-            {
-                return Created<DocumentModel>(document);
-            }
-            else
-            {
-                return Created("não foi possível inserir o documento.");
-            }
-        }
-
-        [HttpPatch("edit")]
-        public async Task<IActionResult> Patch([FromODataUri] int key, Delta<DocumentModel> document)
+        [HttpPost]
+        [Route("post/{key}")]
+        // [ProducesResponseType(typeof(DocumentDto), StatusCodes.Status201Created)]
+        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Post([FromBody] DocumentDto document, [FromODataUri] int key)
         {
             if (!ModelState.IsValid)
             {
@@ -53,30 +39,49 @@ namespace Document.Controller
 
             var entity = await _documentService.GetId(key);
 
-            if (entity == null)
+            if (entity != null)
+            {
+                return BadRequest();
+            }
+            // var response = await _documentService.Insert(document);
+
+            // if (response == 1)
+            // {
+            //     return CreatedAtAction("Documento:", new { id = document.Code }, document);
+            // }
+            // else
+            // {
+            //     return BadRequest();
+            // }
+            return BadRequest();
+            
+        }
+
+        [HttpPut("edit/{key}")]
+        public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] DocumentDto document)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var documentModel = await _documentService.GetId(key);
+
+            if (documentModel == null)
             {
                 return NotFound();
             }
 
-            await _documentService.Edit(document, entity);
-
             try
             {
-                
+                // var response = await _documentService.EditAsync(deltaDocument, documentModel);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(key))
-                {
-                    return NotFound();
-                }
-                else
-                {
                     throw;
-                }
             }
-            return Updated(entity);
 
+            return Updated(documentModel);
         }
     }
 }
