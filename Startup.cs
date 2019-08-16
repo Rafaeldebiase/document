@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Document.Extension;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
-using Microsoft.OData.Edm;
-using Document.Domain;
+
 
 namespace document
 {
@@ -32,8 +29,6 @@ namespace document
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var builder = new ODataConventionModelBuilder(app.ApplicationServices);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -45,10 +40,7 @@ namespace document
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc(routeBuilder =>
-            {
-                routeBuilder.EnableDependencyInjection();
-            });
+            app.UseMvc();
         }
     }
 }
