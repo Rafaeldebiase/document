@@ -6,9 +6,9 @@ namespace Document.Domain
 {
     public class DocumentModel
     {
-        public DocumentModel(bool delete = false)
+        public DocumentModel()
         {
-            Delete = delete;
+
         }
 
         public DocumentModel(int code, string title, string process, Category category, byte[] archive, 
