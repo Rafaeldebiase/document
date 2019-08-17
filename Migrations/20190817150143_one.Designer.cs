@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace document.Migrations
 {
     [DbContext(typeof(ConfigDataContext))]
-    [Migration("20190814235028_new_initial")]
-    partial class new_initial
+    [Migration("20190817150143_one")]
+    partial class one
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,11 +25,6 @@ namespace document.Migrations
                         .HasColumnName("code")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Archive")
-                        .IsRequired()
-                        .HasColumnName("archive")
-                        .HasColumnType("binary(16)");
-
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnName("category")
@@ -38,6 +33,11 @@ namespace document.Migrations
                     b.Property<bool>("Delete")
                         .HasColumnName("delete")
                         .HasColumnType("bool");
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnName("file")
+                        .HasColumnType("MEDIUMBLOB");
 
                     b.Property<string>("Process")
                         .IsRequired()

@@ -9,11 +9,11 @@ namespace Document.Interface.Repository
 {
     public interface IDocumentRepository
     {
-        Task<DocumentModel> GetId(int code);
-        Task<IList<DocumentModel>> GetTitle(string title);
-        Task<IList<DocumentModel>> GetProcess(string process);
-        Task<IList<DocumentModel>> GetCategory(Category category);
-        Task<IList<DocumentModel>> GetAll();
+        Task<DocumentModel> GetCode(int code);
+        IAsyncEnumerable<DocumentModel> GetTitle(string title);
+        IAsyncEnumerable<DocumentModel> GetProcess(string process);
+        IAsyncEnumerable<DocumentModel> GetCategory(Category category);
+        IAsyncEnumerable<DocumentModel> GetAll();
         Task Insert(DocumentDto documentDto);
         void Patch(JsonPatchDocument<DocumentDto> documentDto, DocumentModel documentModel);
         Task<int> Save();

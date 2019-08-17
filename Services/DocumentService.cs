@@ -21,20 +21,20 @@ namespace Document.Service
             _logger = logger;
         }
 
-        public async Task<DocumentModel> GetId(int code) => 
-            await _documentRepository.GetId(code);
+        public async Task<DocumentModel> GetCode(int code) => 
+            await _documentRepository.GetCode(code);
 
-        public async Task<IList<DocumentModel>> GetTitle(string title) => 
-            await _documentRepository.GetTitle(title);
+        public IAsyncEnumerable<DocumentModel> GetTitle(string title) => 
+            _documentRepository.GetTitle(title);
 
-        public async Task<IList<DocumentModel>> GetProcess(string process) =>
-        await _documentRepository.GetTitle(process);
+        public IAsyncEnumerable<DocumentModel> GetProcess(string process) =>
+            _documentRepository.GetProcess(process);
         
-        public async Task<IList<DocumentModel>> GetCategory(Category category) =>
-        await _documentRepository.GetCategory(category);
+        public IAsyncEnumerable<DocumentModel> GetCategory(Category category) =>
+            _documentRepository.GetCategory(category);
         
-        public async Task<IList<DocumentModel>> GetAll() =>
-            await _documentRepository.GetAll();
+        public IAsyncEnumerable<DocumentModel> GetAll() =>
+            _documentRepository.GetAll();
 
         public async Task<int> Insert(DocumentDto documentDto)
         {

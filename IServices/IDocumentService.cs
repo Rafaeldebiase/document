@@ -9,11 +9,11 @@ namespace Document.Interface.Service
 {
     public interface IDocumentService
     {
-        Task<DocumentModel> GetId(int code);
-        Task<IList<DocumentModel>> GetTitle(string title);
-        Task<IList<DocumentModel>> GetProcess(string process);
-        Task<IList<DocumentModel>> GetCategory(Category category);
-        Task<IList<DocumentModel>> GetAll();
+        Task<DocumentModel> GetCode(int code);
+        IAsyncEnumerable<DocumentModel> GetTitle(string title);
+        IAsyncEnumerable<DocumentModel> GetProcess(string process);
+        IAsyncEnumerable<DocumentModel> GetCategory(Category category);
+        IAsyncEnumerable<DocumentModel> GetAll();
         Task<int> Insert(DocumentDto documentDto);
         Task<int> PacthAsync(JsonPatchDocument<DocumentDto> documentPatch, DocumentModel documentDto);
     }

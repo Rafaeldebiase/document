@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace document.Migrations
 {
-    public partial class new_initial : Migration
+    public partial class one : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,8 @@ namespace document.Migrations
                     title = table.Column<string>(type: "varchar(200)", nullable: false),
                     process = table.Column<string>(type: "varchar(200)", nullable: false),
                     category = table.Column<string>(type: "varchar(200)", nullable: false),
-                    archive = table.Column<byte[]>(type: "binary(16)", nullable: false),
-                    delete = table.Column<bool>(type: "bool", nullable: false)
+                    delete = table.Column<bool>(type: "bool", nullable: false),
+                    file = table.Column<byte[]>(type: "MEDIUMBLOB", nullable: false)
                 },
                 constraints: table =>
                 {
