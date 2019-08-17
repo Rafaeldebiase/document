@@ -26,6 +26,10 @@ namespace Document.Controller
             _documentService = documentService;
         }
         
+        ///<summary>
+        ///Busca o documento pelo código
+        ///</summary>
+        ///<param name="key"></param>
         [HttpGet("getbycode/{key}")]
         public ActionResult<DocumentModel> GetByCode(int key)
         {
