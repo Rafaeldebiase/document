@@ -1,6 +1,7 @@
 using AutoMapper;
 using Document.Domain;
 using Document.Dto;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Document.Data.ProfileAutoMapper
 {
@@ -8,6 +9,7 @@ namespace Document.Data.ProfileAutoMapper
     {
         public DocumentProfile()
         {
+            CreateMap<DocumentDto, DocumentModel>();
             CreateMap<DocumentModel, DocumentDto>();
         }
     }
