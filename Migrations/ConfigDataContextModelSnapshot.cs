@@ -23,11 +23,6 @@ namespace document.Migrations
                         .HasColumnName("code")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Archive")
-                        .IsRequired()
-                        .HasColumnName("archive")
-                        .HasColumnType("binary(16)");
-
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnName("category")
@@ -36,6 +31,11 @@ namespace document.Migrations
                     b.Property<bool>("Delete")
                         .HasColumnName("delete")
                         .HasColumnType("bool");
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnName("file")
+                        .HasColumnType("MEDIUMBLOB");
 
                     b.Property<string>("Process")
                         .IsRequired()
