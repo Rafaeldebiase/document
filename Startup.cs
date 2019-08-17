@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Document.Extension;
-
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
+using Microsoft.OpenApi.Models;
 
 namespace document
 {
@@ -38,6 +40,21 @@ namespace document
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseHealthChecks("/status",
+                new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+            app.UseHealthChecksUI();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(config => {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "DocumentsApi V1");
+                config.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
