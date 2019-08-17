@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Document.Domain;
 using Document.Dto;
+using Document.Enum;
 using Document.Interface.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -24,11 +26,27 @@ namespace Document.Controller
             _documentService = documentService;
         }
         
-        [HttpGet("getcode/{key}")]
-        public async Task<ActionResult<IList<DocumentModel>>> GetByCode(int key)
+        [HttpGet("getbycode/{key}")]
+        public ActionResult<DocumentModel> GetByCode(int key)
         {
-
+            return  _documentService.GetCode(key).Result;
         }
+
+        [HttpGet("getbytitle/{title}")]
+        public ActionResult<IList<DocumentModel>> GetByTitle(string title) =>
+            _documentService.GetTitle(title).ToList().Result;
+
+        [HttpGet("getbyprocess/{process}")]
+        public ActionResult<IList<DocumentModel>> GetByProcess(string process) =>
+            _documentService.GetProcess(process).ToList().Result;
+
+        [HttpGet("getbycategory/{category}")]
+        public ActionResult<IList<DocumentModel>> GetByCategory(Category category) =>
+            _documentService.GetCategory(category).ToList().Result;
+
+        [HttpGet("getall")]
+        public ActionResult<IList<DocumentModel>> GetAll(string category) =>
+            _documentService.GetAll().ToList().Result;
 
         [HttpPost("insert/{key}")]
         [ProducesResponseType(typeof(DocumentDto), StatusCodes.Status201Created)]
@@ -40,7 +58,7 @@ namespace Document.Controller
                 return BadRequest(ModelState);
             }
 
-            var documentModel = await _documentService.GetId(key);
+            var documentModel = await _documentService.GetCode(key);
 
             if (documentModel != null)
             {
@@ -67,7 +85,7 @@ namespace Document.Controller
                 return BadRequest(ModelState);
             }
 
-            var documentModel = await _documentService.GetId(key);
+            var documentModel = await _documentService.GetCode(key);
 
             if (documentModel == null)
             {
