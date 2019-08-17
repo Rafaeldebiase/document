@@ -24,36 +24,38 @@ namespace Document.Repository
             _mapper = mapper;
         }
 
-        public async Task<DocumentModel> GetId(int code) =>
+        public async Task<DocumentModel> GetCode(int code) =>
             await _context.Documents
-                .FindAsync(code);
+                .Where(field => field.Delete == false && field.Code == code)
+                .FirstOrDefaultAsync();
 
-        public async Task<IList<DocumentModel>> GetTitle(string title) =>
-            await _context.Documents
-                .Where(field => field.Title.Contains(title))
+        public IAsyncEnumerable<DocumentModel> GetTitle(string title) =>
+            _context.Documents
+                .Where(field => field.Title.Contains(title) && field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToAsyncEnumerable();
 
-        public async Task<IList<DocumentModel>> GetProcess(string process) =>
-            await _context.Documents
-                .Where(field => field.Process.Contains(process))
+        public IAsyncEnumerable<DocumentModel> GetProcess(string process) =>
+            _context.Documents
+                .Where(field => field.Process.Contains(process) && field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToAsyncEnumerable();
 
-        public async Task<IList<DocumentModel>> GetCategory(Category category) =>
-            await _context.Documents
-                .Where(field => field.Category == category)
+        public IAsyncEnumerable<DocumentModel> GetCategory(Category category) =>
+            _context.Documents
+                .Where(field => field.Category == category && field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToAsyncEnumerable();
 
-        public async Task<IList<DocumentModel>> GetAll() =>
-            await _context.Documents
+        public IAsyncEnumerable<DocumentModel> GetAll() =>
+            _context.Documents
+                .Where(field => field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToAsyncEnumerable();
 
         public async Task Insert(DocumentDto documentDto)
         {
@@ -63,7 +65,7 @@ namespace Document.Repository
 
                 await _context.Documents.AddAsync(documentModel);
             }
-            catch (System.InvalidOperationException e)
+            catch (AutoMapperMappingException e)
             {
                 throw new Exception("erro: ", e);
             }
@@ -71,13 +73,22 @@ namespace Document.Repository
 
         public void Patch(JsonPatchDocument<DocumentDto> documentPatch, DocumentModel documentModel)
         {
-            DocumentDto documentDto = _mapper.Map<DocumentDto>(documentModel);
+            try
+            {
+                DocumentDto documentDto = _mapper.Map<DocumentDto>(documentModel);
 
-            documentPatch.ApplyTo(documentDto);
+                documentPatch.ApplyTo(documentDto);
 
-            _mapper.Map(documentDto, documentModel);
+                _mapper.Map(documentDto, documentModel);
 
-            _context.Update(documentModel);
+                _context.Update(documentModel);
+            }
+            catch (AutoMapperMappingException e)
+            {
+
+                throw new Exception("erro: ", e);            
+            }
+
         }
 
         public async Task<int> Save()
