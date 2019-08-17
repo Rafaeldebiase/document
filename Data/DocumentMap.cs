@@ -32,10 +32,10 @@ namespace Document.Data
                 .HasColumnName("category")
                 .HasColumnType("varchar(200)");
 
-            builder.Property(campo => campo.Archive)
+            builder.Property(field => field.File)
                 .IsRequired()
-                .HasColumnName("archive")
-                .HasColumnType("binary(16)");
+                .HasColumnName("file")
+                .HasColumnType("MEDIUMBLOB");
 
             builder.Property(field => field.Delete)
                 .HasColumnName("delete")
