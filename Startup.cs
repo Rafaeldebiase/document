@@ -18,10 +18,12 @@ namespace document
         }
 
         public IConfiguration Configuration { get; }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddSetup();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -41,14 +43,14 @@ namespace document
                 app.UseHsts();
             }
 
-            app.UseHealthChecks("/status",
-                new HealthCheckOptions()
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
+            // app.UseHealthChecks("/status",
+            //     new HealthCheckOptions()
+            //     {
+            //         Predicate = _ => true,
+            //         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            //     });
 
-            app.UseHealthChecksUI();
+            // app.UseHealthChecksUI();
 
             app.UseSwagger();
             app.UseSwaggerUI(config => {
@@ -56,6 +58,12 @@ namespace document
                 config.RoutePrefix = string.Empty;
             });
 
+            app.UseCors(option => {
+                option.AllowAnyOrigin();
+                option.AllowCredentials();
+                option.AllowAnyHeader();
+                option.AllowAnyMethod();
+            });
             app.UseHttpsRedirection();
             app.UseMvc();
         }
