@@ -30,9 +30,7 @@ namespace Document.Controller
                     )
                     {
                         //todo passar rotina para o service
-                        MemoryStream memoryStream = new MemoryStream();
-                        await file.CopyToAsync(memoryStream);
-                        var x = memoryStream.ToArray();
+                        
                         
                         return Ok();
                     }
