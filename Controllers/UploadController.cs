@@ -13,33 +13,33 @@ namespace Document.Controller
     public class UploadController : ControllerBase
     {
         [HttpPost, DisableRequestSizeLimit]
-        public IActionResult Upload()
+        public async Task<IActionResult> UploadAsync()
         {
             try
             {
                 var file = Request.Form.Files[0];
-                var folderName = Path.Combine("Resources", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-                if (file.Length > 0)
+                if (file != null)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    if (
+                        file.ContentType.Contains("application/msword") ||
+                        file.ContentType.Contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+                        file.ContentType.Contains("application/pdf") ||
+                        file.ContentType.Contains("application/vnd.ms-excel") ||
+                        file.ContentType.Contains("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    )
                     {
-                        file.CopyTo(stream);
+                        //todo passar rotina para o service
+                        MemoryStream memoryStream = new MemoryStream();
+                        await file.CopyToAsync(memoryStream);
+                        var x = memoryStream.ToArray();
+                        
+                        return Ok();
                     }
-
-                    return Ok(new { dbPath });
                 }
-                else
-                {
-                    return BadRequest();
-                }
+                return BadRequest();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
