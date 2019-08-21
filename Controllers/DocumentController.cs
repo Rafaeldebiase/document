@@ -14,8 +14,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Document.Controller
 {
-    [Route("api/[controller]")]
-    public class DocumentController : ControllerBase
+    [Route("api/v1/[controller]")]
+    public partial class DocumentController : ControllerBase
     {
         private readonly ILogger<DocumentController> _logger;
         private readonly IDocumentService _documentService;
@@ -25,11 +25,7 @@ namespace Document.Controller
             _logger = logger;
             _documentService = documentService;
         }
-        
-        ///<summary>
-        ///Busca o documento pelo código
-        ///</summary>
-        ///<param name="key"></param>
+
         [HttpGet("getbycode/{key}")]
         public ActionResult<DocumentModel> GetByCode(int key)
         {
@@ -60,6 +56,11 @@ namespace Document.Controller
                 return BadRequest(ModelState);
             }
 
+            if (!DocumentDtoIsValid(documentDto))
+            {
+                return BadRequest(errorListDocumentDto.ToList());
+            }
+
             var documentModel = await _documentService.GetCode(key);
 
             if (documentModel != null)
@@ -67,6 +68,7 @@ namespace Document.Controller
                 var responseBadRequest = $"O documento de cógido {key} já está cadastrado";
                 return BadRequest( responseBadRequest );
             }
+
             var response = await _documentService.Insert(documentDto);
 
             if (response == 1)
