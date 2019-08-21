@@ -20,6 +20,7 @@ namespace Document.Domain
         public string Name { get; private set; }
         public byte[] Data { get; private set;}
         public string ContentType { get; private set; } 
+        public int DocumentId { get; set; }
         public DocumentModel Document { get; set; }
     }
 }

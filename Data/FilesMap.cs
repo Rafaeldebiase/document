@@ -29,7 +29,7 @@ namespace Document.Data
             builder.HasOne(field => field.Document)
                 .WithOne(field => field.File)
                 .HasForeignKey<DocumentModel>(field => field.Code)
-                .HasPrincipalKey<FileModel>(field => field.Id);
+                .HasPrincipalKey<FileModel>(field => field.DocumentId);
         }
     }
 }
