@@ -22,6 +22,7 @@ namespace Document.Data
         }
 
         public DbSet<DocumentModel> Documents { get; set; }
+        public DbSet<FileModel> Files { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,6 +35,7 @@ namespace Document.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new DocumentMap());
+            modelBuilder.ApplyConfiguration(new FileMap());
 
             base.OnModelCreating(modelBuilder);
         }

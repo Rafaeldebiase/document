@@ -1,3 +1,4 @@
+using System;
 using Document.Enum;
 
 namespace Document.Domain
@@ -5,20 +6,19 @@ namespace Document.Domain
     public class DocumentModel
     {
 
-        public DocumentModel()
+        protected DocumentModel()
         {
 
         }
 
         public DocumentModel(int code, string title, string process, Category category,
-            bool delete, byte[] file)
+            bool delete)
         {
             Code = code;
             Title = title;
             Process = process;
             Category = category;
             Delete = delete;
-            File = file;
         }
 
         public int Code { get; private set; }
@@ -26,7 +26,7 @@ namespace Document.Domain
         public string Process { get; private set; }
         public Category Category { get; private set; }
         public bool Delete { get; private set; }
-        public byte[] File { get; private set; }
+        public FileModel File { get; }
     }
 }
 

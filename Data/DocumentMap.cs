@@ -10,32 +10,32 @@ namespace Document.Data
         {
             builder.ToTable("Document");
 
-            builder.HasKey(campo => campo.Code);
+            builder.HasKey(field => field.Code);
 
             builder.Property(field => field.Code)
                 .HasColumnName("code")
                 .ValueGeneratedNever()
                 .HasColumnType("int");
 
-            builder.Property(campo => campo.Title)
+            builder.Property(field => field.Title)
                 .IsRequired()
                 .HasColumnName("title")
                 .HasColumnType("varchar(200)");
 
-            builder.Property(campo => campo.Process)
+            builder.Property(field => field.Process)
                 .IsRequired()
                 .HasColumnName("process")
                 .HasColumnType("varchar(200)");
 
-            builder.Property(campo => campo.Category)
+            builder.Property(field => field.Category)
                 .IsRequired()
                 .HasColumnName("category")
                 .HasColumnType("varchar(200)");
 
-            builder.Property(field => field.File)
-                .IsRequired()
-                .HasColumnName("file")
-                .HasColumnType("MEDIUMBLOB");
+            builder.HasOne(field => field.File)
+                .WithOne(field => field.Document)
+                .HasForeignKey<FileModel>(field => field.Id)
+                .HasPrincipalKey<DocumentModel>(field => field.Code);
 
             builder.Property(field => field.Delete)
                 .HasColumnName("delete")
