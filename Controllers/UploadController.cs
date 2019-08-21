@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Document.Interface.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,8 +13,21 @@ namespace Document.Controller
     [Route("api/[controller]")]
     public class UploadController : ControllerBase
     {
-        [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadAsync()
+        private readonly IUploadService _uploadService;
+
+        public UploadController(IUploadService uploadService)
+        {
+            _uploadService = uploadService;
+        }
+
+        [HttpGet("get/{id}")]
+        public async Task<FileStreamResult> GetFileAsync(int id)
+        {
+            return await _uploadService.GetAsync(id);
+        }
+
+        [HttpPost("insert/{id}"), DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadAsync(int id)
         {
             try
             {
@@ -30,12 +44,21 @@ namespace Document.Controller
                     )
                     {
                         //todo passar rotina para o service
-                        
-                        
-                        return Ok();
+                        var response = await _uploadService.insertAsync(file, id);
+
+                        if (response == 1) 
+                        {
+                            return StatusCode(201, file);
+                        }
+                        else
+                        {
+                            var erroMessageSave = "Não foi possível salvar o documento.";
+                            return BadRequest(erroMessageSave);
+                        }
                     }
                 }
-                return BadRequest();
+                var erroMessageType = "Formato do documento informado não é suportado";
+                return BadRequest(erroMessageType);
             }
             catch (Exception)
             {

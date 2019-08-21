@@ -50,6 +50,7 @@ namespace Document.Extension
             services.AddScoped<IDocumentService, DocumentService>();
 
             services.AddScoped<IUploadService, UploadService>();
+            services.AddScoped<IUploadRepository, UploadRepository>();
         }
     }
 }

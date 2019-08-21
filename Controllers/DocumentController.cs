@@ -27,10 +27,8 @@ namespace Document.Controller
         }
 
         [HttpGet("getbycode/{key}")]
-        public ActionResult<DocumentModel> GetByCode(int key)
-        {
-            return  _documentService.GetCode(key).Result;
-        }
+        public ActionResult<DocumentModel> GetByCode(int key) =>
+            _documentService.GetCode(key).Result;
 
         [HttpGet("getbytitle/{title}")]
         public ActionResult<IList<DocumentModel>> GetByTitle(string title) =>

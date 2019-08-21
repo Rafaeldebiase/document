@@ -8,9 +8,8 @@ namespace Document.Domain
         {
             
         }
-        public FileModel(int id, string name, byte[] data, string contentType)
+        public FileModel(string name, byte[] data, string contentType)
         {
-            Id = id;
             Name = name;
             Data = data;
             ContentType = contentType;

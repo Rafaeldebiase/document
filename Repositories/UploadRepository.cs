@@ -1,9 +1,14 @@
+using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Document.Data;
+using Document.Domain;
+using Document.Interface.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Document.Repository
 {
-    public class UploadRepository
+    public class UploadRepository : IUploadRepository
     {
         private readonly ConfigDataContext _context;
         private readonly IMapper _mapper;
@@ -14,9 +19,29 @@ namespace Document.Repository
             _mapper = mapper;
         }
 
-        public void Insert()
+        public async Task<FileModel> GetAsync(int id) => 
+            await _context.Files.FirstOrDefaultAsync(field => field.Id == id);
+
+        public async Task InsertAsync(FileModel file)
         {
-            
+            await _context.Files.AddAsync(file);
+        }
+
+        public async Task<int> Save()
+        {
+            try
+            {
+                var result = await _context.SaveChangesAsync();
+                return result;
+            }
+            catch (DbUpdateException e)
+            {
+                throw new Exception("Erro: ", e);
+            }
+            catch (ObjectDisposedException err)
+            {
+                throw new Exception("Erro: ", err);
+            }
         }
     }
 }
