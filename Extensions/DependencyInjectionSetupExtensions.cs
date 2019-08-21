@@ -20,9 +20,9 @@ namespace Document.Extension
             services.AddDbContext<ConfigDataContext>();
 
             services.AddAutoMapper(typeof(DocumentProfile));
-            services.AddHealthChecks()
-                .AddMySql("Server=localhost;User Id=rafael;Password=rafael123456;Database=documentdb;", "Banco MySql");
-            services.AddHealthChecksUI();
+            // services.AddHealthChecks()
+            //     .AddMySql("Server=localhost;User Id=rafael;Password=rafael123456;Database=documentdb;", "Banco MySql");
+            // services.AddHealthChecksUI();
 
             services.AddSwaggerGen(config =>
             {

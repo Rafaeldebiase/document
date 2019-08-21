@@ -7,6 +7,9 @@ using Document.Extension;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace document
 {
@@ -53,16 +56,24 @@ namespace document
             // app.UseHealthChecksUI();
 
             app.UseSwagger();
-            app.UseSwaggerUI(config => {
+            app.UseSwaggerUI(config =>
+            {
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "DocumentsApi V1");
                 config.RoutePrefix = string.Empty;
             });
 
-            app.UseCors(option => {
+            app.UseCors(option =>
+            {
                 option.AllowAnyOrigin();
                 option.AllowCredentials();
                 option.AllowAnyHeader();
                 option.AllowAnyMethod();
+            });
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
             });
             app.UseHttpsRedirection();
             app.UseMvc();
