@@ -53,8 +53,6 @@ namespace Document.Controller
             _documentService.GetAll().ToList().Result;
 
         [HttpPost("insert/{key}")]
-        [ProducesResponseType(typeof(DocumentDto), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] DocumentDto documentDto, int key)
         {
             if (!ModelState.IsValid)
@@ -66,17 +64,19 @@ namespace Document.Controller
 
             if (documentModel != null)
             {
-                return BadRequest();
+                var responseBadRequest = $"O documento de cógido {key} já está cadastrado";
+                return BadRequest( responseBadRequest );
             }
             var response = await _documentService.Insert(documentDto);
 
             if (response == 1)
             {
-                return CreatedAtAction("Documento:", new { id = documentDto.Code }, documentDto);
+                return StatusCode(201, documentDto);
             }
             else
             {
-                return BadRequest();
+                var responseForbidden = "Não foi possível cadastro o documento. Verifique os dados informados";
+                return StatusCode(403, responseForbidden);
             }
             
         }
