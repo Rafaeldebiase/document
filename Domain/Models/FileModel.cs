@@ -8,7 +8,7 @@ namespace Document.Domain
         {
             
         }
-        public FileModel(Guid id, string name, byte[] data, string contentType)
+        public FileModel(int id, string name, byte[] data, string contentType)
         {
             Id = id;
             Name = name;
@@ -16,11 +16,10 @@ namespace Document.Domain
             ContentType = contentType;
         }
 
-        public Guid Id { get; private set; }
+        public int Id { get; private set; }
         public string Name { get; private set; }
         public byte[] Data { get; private set;}
         public string ContentType { get; private set; } 
-        public int DocumentId { get; set; }
         public DocumentModel Document { get; set; }
     }
 }

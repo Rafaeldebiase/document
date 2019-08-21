@@ -26,7 +26,6 @@ namespace Document.Domain
         public string Process { get; private set; }
         public Category Category { get; private set; }
         public bool Delete { get; private set; }
-        public Guid FileId { get; set; }
         public FileModel File { get; set; }
     }
 }

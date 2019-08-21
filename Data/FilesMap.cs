@@ -14,8 +14,8 @@ namespace Document.Data
 
             builder.Property(field => field.Id)
                 .HasColumnName("code")
-                .ValueGeneratedNever()
-                .HasColumnType("uuid");
+                .ValueGeneratedOnAdd()
+                .HasColumnType("int");
             
             builder.Property(field => field.Name)
                 .HasColumnName("name")
@@ -29,7 +29,12 @@ namespace Document.Data
             builder.HasOne(field => field.Document)
                 .WithOne(field => field.File)
                 .HasForeignKey<DocumentModel>(field => field.Code)
-                .HasPrincipalKey<FileModel>(field => field.DocumentId);
+                .HasPrincipalKey<FileModel>(field => field.Id);
+
+            builder.Property(field => field.Data)
+                .HasColumnName("data")
+                .HasColumnType("LONGBLOB")
+                .IsRequired();
         }
     }
 }

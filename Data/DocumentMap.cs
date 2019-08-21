@@ -35,7 +35,7 @@ namespace Document.Data
             builder.HasOne(field => field.File)
                 .WithOne(field => field.Document)
                 .HasForeignKey<FileModel>(field => field.Id)
-                .HasPrincipalKey<DocumentModel>(field => field.FileId);
+                .HasPrincipalKey<DocumentModel>(field => field.Code);
 
             builder.Property(field => field.Delete)
                 .HasColumnName("delete")
