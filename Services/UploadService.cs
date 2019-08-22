@@ -30,7 +30,7 @@ namespace Document.Service
             MemoryStream memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
 
-            var fileModel = new FileModel(file.Name, memoryStream.ToArray(), file.ContentType);
+            var fileModel = new FileModel(file.Name, memoryStream.ToArray(), file.ContentType, id);
 
             await _uploadRepository.InsertAsync(fileModel);
 

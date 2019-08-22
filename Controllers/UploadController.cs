@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Document.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class UploadController : ControllerBase
     {
         private readonly IUploadService _uploadService;
