@@ -20,7 +20,7 @@ namespace Document.Repository
         }
 
         public async Task<FileModel> GetAsync(int id) => 
-            await _context.Files.FirstOrDefaultAsync(field => field.Id == id);
+            await _context.Files.FirstOrDefaultAsync(field => field.DocumentModelId == id);
 
         public async Task InsertAsync(FileModel file)
         {
