@@ -62,13 +62,7 @@ namespace document
                 config.RoutePrefix = string.Empty;
             });
 
-            app.UseCors(option =>
-            {
-                option.AllowAnyOrigin();
-                option.AllowCredentials();
-                option.AllowAnyHeader();
-                option.AllowAnyMethod();
-            });
+            app.UseCors("CorsPolicy");
             // app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMvc();

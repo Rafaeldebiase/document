@@ -39,8 +39,8 @@ namespace Document.Controller
             _documentService.GetProcess(process).ToList().Result;
 
         [HttpGet("getbycategory/{category}")]
-        public ActionResult<IList<DocumentModel>> GetByCategory(string category) =>
-            _documentService.GetCategory(category).ToList().Result;
+        public ActionResult<IList<DocumentModel>> GetByCategory(int numberOfCategory) =>
+            _documentService.GetCategory(numberOfCategory).ToList().Result;
 
         [HttpGet("getall")]
         public ActionResult<IList<DocumentModel>> GetAll(string category) =>

@@ -30,8 +30,12 @@ namespace Document.Service
         public IAsyncEnumerable<DocumentModel> GetProcess(string process) =>
             _documentRepository.GetProcess(process);
         
-        public IAsyncEnumerable<DocumentModel> GetCategory(Category category) =>
-            _documentRepository.GetCategory(category);
+        public IAsyncEnumerable<DocumentModel> GetCategory(int numberOfCategory)
+        {
+            var  category = (Category)numberOfCategory;
+
+            return _documentRepository.GetCategory(category);
+        }
         
         public IAsyncEnumerable<DocumentModel> GetAll() =>
             _documentRepository.GetAll();

@@ -20,6 +20,14 @@ namespace Document.Extension
             services.AddDbContext<ConfigDataContext>();
 
             services.AddAutoMapper(typeof(DocumentProfile));
+
+            services.AddCors(options =>{
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            }); 
+            
             // services.AddHealthChecks()
             //     .AddMySql("Server=localhost;User Id=rafael;Password=rafael123456;Database=documentdb;", "Banco MySql");
             // services.AddHealthChecksUI();
@@ -53,4 +61,4 @@ namespace Document.Extension
             services.AddScoped<IUploadRepository, UploadRepository>();
         }
     }
-}
+    }
