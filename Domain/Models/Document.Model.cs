@@ -1,5 +1,4 @@
-using System;
-using Document.Enum;
+using Document.Enuns;
 
 namespace Document.Domain
 {

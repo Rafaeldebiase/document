@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace Document.Controller
 {
     [Route("api/v1/[controller]")]
-    public class UploadController : ControllerBase
+    public class FileController : ControllerBase
     {
-        private readonly IUploadService _uploadService;
+        private readonly IFileService _fileService;
 
-        public UploadController(IUploadService uploadService)
+        public FileController(IFileService fileService)
         {
-            _uploadService = uploadService;
+            _fileService = fileService;
         }
 
         [HttpGet("get/{id}")]
         public async Task<FileStreamResult> GetFileAsync(int id)
         {
-            return await _uploadService.GetAsync(id);
+            return await _fileService.GetAsync(id);
         }
 
         [HttpPost("insert/{id}"), DisableRequestSizeLimit]
@@ -39,7 +39,7 @@ namespace Document.Controller
                     )
                     {
                         //todo passar rotina para o service
-                        var response = await _uploadService.insertAsync(file, id);
+                        var response = await _fileService.insertAsync(file, id);
 
                         if (response == 1) 
                         {

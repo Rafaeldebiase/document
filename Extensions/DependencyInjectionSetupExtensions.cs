@@ -57,8 +57,8 @@ namespace Document.Extension
             services.AddScoped<IDocumentRepository, DocumentRepository>();
             services.AddScoped<IDocumentService, DocumentService>();
 
-            services.AddScoped<IUploadService, UploadService>();
-            services.AddScoped<IUploadRepository, UploadRepository>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IFileRepository, FileRepository>();
         }
     }
     }

@@ -3,7 +3,7 @@ using Document.Domain;
 
 namespace Document.Interface.Repository
 {
-    public interface IUploadRepository
+    public interface IFileRepository
     {
         Task<FileModel> GetAsync(int id);
         Task InsertAsync(FileModel file);

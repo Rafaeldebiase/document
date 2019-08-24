@@ -8,18 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Document.Service
 {
-    public class UploadService : IUploadService
+    public class FileService : IFileService
     {
-        private readonly IUploadRepository _uploadRepository;
+        private readonly IFileRepository _fileRepository;
 
-        public UploadService(IUploadRepository uploadRepository)
+        public FileService(IFileRepository fileRepository)
         {
-            _uploadRepository = uploadRepository;
+            _fileRepository = fileRepository;
         }
 
         public async Task<FileStreamResult> GetAsync(int id)
         {
-            var file = await _uploadRepository.GetAsync(id);
+            var file = await _fileRepository.GetAsync(id);
 
             MemoryStream memoryStream = new MemoryStream(file.Data);
             return new FileStreamResult(memoryStream, file.ContentType);
@@ -32,9 +32,9 @@ namespace Document.Service
 
             var fileModel = new FileModel(file.Name, memoryStream.ToArray(), file.ContentType, id);
 
-            await _uploadRepository.InsertAsync(fileModel);
+            await _fileRepository.InsertAsync(fileModel);
 
-            return await _uploadRepository.Save();
+            return await _fileRepository.Save();
         }
     }
 }

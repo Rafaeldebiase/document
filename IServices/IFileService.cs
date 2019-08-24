@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Document.Interface.Service
 {
-    public interface IUploadService
+    public interface IFileService
     {
         Task<int> insertAsync(IFormFile file, int id);
         Task<FileStreamResult> GetAsync(int id);

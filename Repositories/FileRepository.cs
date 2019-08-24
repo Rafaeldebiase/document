@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Document.Repository
 {
-    public class UploadRepository : IUploadRepository
+    public class FileRepository : IFileRepository
     {
         private readonly ConfigDataContext _context;
         private readonly IMapper _mapper;
 
-        public UploadRepository(ConfigDataContext context, IMapper mapper)
+        public FileRepository(ConfigDataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

@@ -1,4 +1,4 @@
-namespace Document.Enum
+namespace Document.Enuns
 {
     public enum Category
     {
