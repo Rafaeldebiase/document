@@ -5,7 +5,7 @@ using Document.Domain;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Document.Enum;
+using Document.Enuns;
 using Document.Interface.Repository;
 using AutoMapper;
 using Document.Dto;
@@ -29,33 +29,33 @@ namespace Document.Repository
                 .Where(field => field.Delete == false && field.Code == code)
                 .FirstOrDefaultAsync();
 
-        public IAsyncEnumerable<DocumentModel> GetTitle(string title) =>
+        public IEnumerable<DocumentModel> GetTitle(string title) =>
             _context.Documents
                 .Where(field => field.Title.Contains(title) && field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToAsyncEnumerable();
+                .AsEnumerable();
 
-        public IAsyncEnumerable<DocumentModel> GetProcess(string process) =>
+        public IEnumerable<DocumentModel> GetProcess(string process) =>
             _context.Documents
                 .Where(field => field.Process.Contains(process) && field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToAsyncEnumerable();
+                .AsEnumerable();
 
-        public IAsyncEnumerable<DocumentModel> GetCategory(Category category) =>
+        public IEnumerable<DocumentModel> GetCategory(Category category) =>
             _context.Documents
                 .Where(field => field.Category == category && field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToAsyncEnumerable();
+                .AsEnumerable();
 
-        public IAsyncEnumerable<DocumentModel> GetAll() =>
+        public IEnumerable<DocumentModel> GetAll() =>
             _context.Documents
                 .Where(field => field.Delete == false)
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
-                .ToAsyncEnumerable();
+                .AsEnumerable();
 
         public async Task Insert(DocumentDto documentDto)
         {
@@ -71,10 +71,12 @@ namespace Document.Repository
             }
         }
 
-        public void Patch(JsonPatchDocument<DocumentDto> documentPatch, DocumentModel documentModel)
+        public void Patch(JsonPatchDocument<DocumentDto> documentPatch, int code)
         {
             try
             {
+                var documentModel = GetCode(code).Result;
+
                 DocumentDto documentDto = _mapper.Map<DocumentDto>(documentModel);
 
                 documentPatch.ApplyTo(documentDto);

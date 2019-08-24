@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Document.Domain;
 using Document.Dto;
-using Document.Enum;
 using Document.Interface.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,24 +24,24 @@ namespace Document.Controller
         }
 
         [HttpGet("getbycode/{key}")]
-        public ActionResult<DocumentModel> GetByCode(int key) =>
+        public ActionResult<DocumentModelReturnDto> GetByCode(int key) =>
             _documentService.GetCode(key).Result;
 
         [HttpGet("getbytitle/{title}")]
-        public ActionResult<IList<DocumentModel>> GetByTitle(string title) =>
-            _documentService.GetTitle(title).ToList().Result;
+        public ActionResult<IList<DocumentModelReturnDto>> GetByTitle(string title) =>
+            _documentService.GetTitle(title).ToList();
 
         [HttpGet("getbyprocess/{process}")]
-        public ActionResult<IList<DocumentModel>> GetByProcess(string process) =>
-            _documentService.GetProcess(process).ToList().Result;
+        public ActionResult<IList<DocumentModelReturnDto>> GetByProcess(string process) =>
+            _documentService.GetProcess(process).ToList();
 
         [HttpGet("getbycategory/{category}")]
-        public ActionResult<IList<DocumentModel>> GetByCategory(int numberOfCategory) =>
-            _documentService.GetCategory(numberOfCategory).ToList().Result;
+        public ActionResult<IList<DocumentModelReturnDto>> GetByCategory(int numberOfCategory) =>
+            _documentService.GetCategory(numberOfCategory).ToList();
 
         [HttpGet("getall")]
-        public ActionResult<IList<DocumentModel>> GetAll(string category) =>
-            _documentService.GetAll().ToList().Result;
+        public ActionResult<IList<DocumentModelReturnDto>> GetAll(string category) =>
+            _documentService.GetAll().ToList();
 
         [HttpPost("insert/{key}")]
         public async Task<IActionResult> Post([FromBody] DocumentDto documentDto, int key)
@@ -89,16 +86,16 @@ namespace Document.Controller
                 return BadRequest(ModelState);
             }
 
-            var documentModel = await _documentService.GetCode(key);
+            var document = await _documentService.GetCode(key);
 
-            if (documentModel == null)
+            if (document == null)
             {
                 return NotFound();
             }
 
             try
             {
-                var response = await _documentService.PacthAsync(documentPatch, documentModel);
+                var response = await _documentService.PacthAsync(documentPatch, document.Code);
             }
             catch (DbUpdateConcurrencyException)
             {

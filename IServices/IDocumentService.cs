@@ -8,12 +8,12 @@ namespace Document.Interface.Service
 {
     public interface IDocumentService
     {
-        Task<DocumentModel> GetCode(int code);
-        IAsyncEnumerable<DocumentModel> GetTitle(string title);
-        IAsyncEnumerable<DocumentModel> GetProcess(string process);
-        IAsyncEnumerable<DocumentModel> GetCategory(int numberOfCategory);
-        IAsyncEnumerable<DocumentModel> GetAll();
+        Task<DocumentModelReturnDto> GetCode(int code);
+        IEnumerable<DocumentModelReturnDto> GetTitle(string title);
+        IEnumerable<DocumentModelReturnDto> GetProcess(string process);
+        IEnumerable<DocumentModelReturnDto> GetCategory(int numberOfCategory);
+        IEnumerable<DocumentModelReturnDto> GetAll();
         Task<int> Insert(DocumentDto documentDto);
-        Task<int> PacthAsync(JsonPatchDocument<DocumentDto> documentPatch, DocumentModel documentDto);
+        Task<int> PacthAsync(JsonPatchDocument<DocumentDto> documentPatch, int code);
     }
 }
