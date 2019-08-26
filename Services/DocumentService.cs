@@ -22,45 +22,35 @@ namespace Document.Service
             _logger = logger;
         }
 
-        public async Task<DocumentModelReturnDto> GetCode(int code)
+        public async Task<DocumentModelReturnDto> GetCode(int code) => 
+            await _documentRepository.GetCode(code);
+
+        public async Task<bool> DocumentExist(int code) 
         {
             var document = await _documentRepository.GetCode(code);
 
-            return new DocumentModelReturnDto(document.Code, document.Title, document.Process,
-                CategoryEnumToString(document.Category));
+            if (document != null)
+                return true;
+            
+            return false;
         }
 
-        public IEnumerable<DocumentModelReturnDto> GetTitle(string title)
-        {
-            var documents = _documentRepository.GetTitle(title);
+        public IEnumerable<DocumentModelReturnDto> GetTitle(string title) =>
+            _documentRepository.GetTitle(title);
 
-            return DocumentModelToDocumentModelReturnDto(documents);
-        }
-
-        public IEnumerable<DocumentModelReturnDto> GetProcess(string process)
-        {
-            var documents = _documentRepository.GetProcess(process);
-
-            return DocumentModelToDocumentModelReturnDto(documents);
-        }
+        public IEnumerable<DocumentModelReturnDto> GetProcess(string process) =>
+            _documentRepository.GetProcess(process);
 
         public IEnumerable<DocumentModelReturnDto> GetCategory(int numberOfCategory)
         {
             var category = (Category)numberOfCategory;
 
-            var documents = _documentRepository.GetCategory(category);
-
-            return DocumentModelToDocumentModelReturnDto(documents);
+            return _documentRepository.GetCategory(category);
 
         }
 
-        public IEnumerable<DocumentModelReturnDto> GetAll()
-        {
-            var documents = _documentRepository.GetAll();
-
-            return DocumentModelToDocumentModelReturnDto(documents);
-
-        }
+        public IEnumerable<DocumentModelReturnDto> GetAll() => 
+            _documentRepository.GetAll();
 
         public async Task<int> Insert(DocumentDto documentDto)
         {
@@ -73,36 +63,6 @@ namespace Document.Service
         {
             _documentRepository.Patch(documentPacth, code);
             return await _documentRepository.Save();
-        }
-
-        private IEnumerable<DocumentModelReturnDto> DocumentModelToDocumentModelReturnDto(IEnumerable<DocumentModel> documents)
-        {
-            IEnumerable<DocumentModelReturnDto> documentList = new List<DocumentModelReturnDto>();
-
-
-            foreach (var item in documents)
-            {
-                var document = new DocumentModelReturnDto(item.Code, item.Title, item.Process,
-                    CategoryEnumToString(item.Category));
-
-                documentList.Append(document);
-            }
-
-            return documentList;
-        }
-        private string CategoryEnumToString(Category category)
-        {
-            switch (category)
-            {
-                case Category.RN1:
-                    return "RN1";
-                case Category.RN2:
-                    return "RN2";
-                case Category.RN3:
-                    return "RN4";
-                default:
-                    return "RN5";
-            }
         }
     }
 }

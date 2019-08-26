@@ -10,8 +10,6 @@ namespace Document.Dto
         public string Title { get; set; }
         public string Process { get; set; }
         public int Category { get; set; }
-        public byte[] File { get; set; }
-        public IFormFile FormFile { get; set; }
         public bool Delete { get; set; }
     }
 }

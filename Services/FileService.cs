@@ -1,4 +1,6 @@
 using System.IO;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Document.Domain;
 using Document.Interface.Repository;
@@ -20,7 +22,6 @@ namespace Document.Service
         public async Task<FileStreamResult> GetAsync(int id)
         {
             var file = await _fileRepository.GetAsync(id);
-
             MemoryStream memoryStream = new MemoryStream(file.Data);
             return new FileStreamResult(memoryStream, file.ContentType);
         }
@@ -30,7 +31,7 @@ namespace Document.Service
             MemoryStream memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
 
-            var fileModel = new FileModel(file.Name, memoryStream.ToArray(), file.ContentType, id);
+            var fileModel = new FileModel(file.FileName, memoryStream.ToArray(), file.ContentType, id);
 
             await _fileRepository.InsertAsync(fileModel);
 

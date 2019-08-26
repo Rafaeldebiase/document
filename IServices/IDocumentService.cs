@@ -15,5 +15,6 @@ namespace Document.Interface.Service
         IEnumerable<DocumentModelReturnDto> GetAll();
         Task<int> Insert(DocumentDto documentDto);
         Task<int> PacthAsync(JsonPatchDocument<DocumentDto> documentPatch, int code);
+        Task<bool> DocumentExist(int code);
     }
 }

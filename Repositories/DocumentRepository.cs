@@ -24,35 +24,50 @@ namespace Document.Repository
             _mapper = mapper;
         }
 
-        public async Task<DocumentModel> GetCode(int code) =>
+        public async Task<DocumentModelReturnDto> GetCode(int code) =>
             await _context.Documents
                 .Where(field => field.Delete == false && field.Code == code)
+                .Select(field => new DocumentModelReturnDto(
+                    field.Code, field.Title, field.Process, CategoryEnumToString(field.Category), 
+                    field.File.Name))
                 .FirstOrDefaultAsync();
 
-        public IEnumerable<DocumentModel> GetTitle(string title) =>
+        public IEnumerable<DocumentModelReturnDto> GetTitle(string title) =>
             _context.Documents
                 .Where(field => field.Title.Contains(title) && field.Delete == false)
+                .Select(field => new DocumentModelReturnDto(
+                    field.Code, field.Title, field.Process, CategoryEnumToString(field.Category), 
+                    field.File.Name))
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
                 .AsEnumerable();
 
-        public IEnumerable<DocumentModel> GetProcess(string process) =>
+        public IEnumerable<DocumentModelReturnDto> GetProcess(string process) =>
             _context.Documents
                 .Where(field => field.Process.Contains(process) && field.Delete == false)
+                .Select(field => new DocumentModelReturnDto(
+                    field.Code, field.Title, field.Process, CategoryEnumToString(field.Category), 
+                    field.File.Name))
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
                 .AsEnumerable();
 
-        public IEnumerable<DocumentModel> GetCategory(Category category) =>
+        public IEnumerable<DocumentModelReturnDto> GetCategory(Category category) =>
             _context.Documents
                 .Where(field => field.Category == category && field.Delete == false)
+                .Select(field => new DocumentModelReturnDto(
+                    field.Code, field.Title, field.Process, CategoryEnumToString(field.Category), 
+                    field.File.Name))
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
                 .AsEnumerable();
 
-        public IEnumerable<DocumentModel> GetAll() =>
+        public IEnumerable<DocumentModelReturnDto> GetAll() =>
             _context.Documents
                 .Where(field => field.Delete == false)
+                .Select(field => new DocumentModelReturnDto(
+                    field.Code, field.Title, field.Process, CategoryEnumToString(field.Category), 
+                    field.File.Name))
                 .OrderBy(field => field.Title)
                 .AsNoTracking()
                 .AsEnumerable();
@@ -107,6 +122,21 @@ namespace Document.Repository
             catch (ObjectDisposedException err)
             {
                 throw new Exception("Erro: ", err);
+            }
+        }
+
+        private string CategoryEnumToString(Category category)
+        {
+            switch (category)
+            {
+                case Category.RN1:
+                    return "RN1";
+                case Category.RN2:
+                    return "RN2";
+                case Category.RN3:
+                    return "RN4";
+                default:
+                    return "RN5";
             }
         }
     }

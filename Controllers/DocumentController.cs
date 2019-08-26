@@ -56,9 +56,9 @@ namespace Document.Controller
                 return BadRequest(errorListDocumentDto.ToList());
             }
 
-            var documentModel = await _documentService.GetCode(key);
+            var documentExist = await _documentService.DocumentExist(key);
 
-            if (documentModel != null)
+            if (documentExist)
             {
                 var responseBadRequest = $"O documento de cógido {key} já está cadastrado";
                 return BadRequest( responseBadRequest );
